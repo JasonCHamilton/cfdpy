@@ -48,3 +48,22 @@
     testing. Once new models/features are tested using python solvers they can
     be implimented into fortran solvers.
 '''
+
+
+# import numpy as np
+import grids.gridgenerator as gridgen
+import fileio.outputvtk as outputvtk
+
+
+# Inputs Section #
+# Grid Inputs
+nx = 4    # number of nodes in the x direction
+ny = 4    # number of nodes in the y direction
+ngc = 1   # number of ghost cells
+Lx = 3.0  # Length in the x direction in physical units
+Ly = 3.0  # Length in the y direction in physical units
+datatype = 'ASCII'
+
+grid = gridgen.generategrid_2d_uniform(Lx, Ly, nx, ny, ngc)
+
+outputvtk.writegridtovtk(datatype, grid.ngx, grid.ngy, grid.x, grid.y)
