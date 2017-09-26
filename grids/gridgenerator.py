@@ -1,14 +1,19 @@
-''' Grid Generators
+"""
+Grid Generators.
+
     The file contains the routines used to generate structured grids.
     Currently only supportes 2D structed grids.
-'''
+"""
 
 import numpy as np
 
 
 # Class to cotain 2D grid data
 class Grid2D(object):
+    """Class used for 2D structed grids."""
+
     def __init__(self, nx, ny, ngc):
+        """Initialize Grid2D object."""
         # ngc is number of ghost cells, ngx and ngy are number of nodes
         # including ghost nodes
         ngx = nx + 2*ngc
@@ -69,6 +74,7 @@ class Grid2D(object):
 
 
 def generategrid_2d_uniform(Lx, Ly, nx, ny, ngc):
+    """Compute uniform 2D grid from inputs."""
     # nx and ny are number of nodes in the zeta and eta computation coordinates
     # ngc is the number of ghost cell to be added to the grid
     # Lx and Ly are the x and y lenghts of the grid
@@ -115,6 +121,7 @@ def generategrid_2d_uniform(Lx, Ly, nx, ny, ngc):
 
 
 def compute2dcellinvmetrics(invjacobian, dxdzeta, dxdeta, dydzeta, dydeta):
+    """Compute inverse grid metrics at cell center for 2D grid."""
     # compute inverse grid metrics using jacobian
     # and grid metrics computed at the cell centers
     dzetadx = invjacobian*dydeta
@@ -125,12 +132,14 @@ def compute2dcellinvmetrics(invjacobian, dxdzeta, dxdeta, dydzeta, dydeta):
 
 
 def compute2dinversejacobian(jacobian):
+    """Compute inverse jacobian from jacobian."""
     # stole 1/J for later uses
     invjacobian = 1.0/jacobian
     return invjacobian
 
 
 def compute2djacobian(dxdzeta_cell, dxdeta_cell, dydzeta_cell, dydeta_cell):
+    """Compute jacobian for 2D grid."""
     # inputs are the grid metrics computed at the cell centers using the
     # cell face centers
 
@@ -141,6 +150,7 @@ def compute2djacobian(dxdzeta_cell, dxdeta_cell, dydzeta_cell, dydeta_cell):
 
 
 def compute2dfacegridmetrics(x, y, xiface, yiface, xjface, yjface):
+    """Compute grid metrics at cell faces for 2D grid."""
     # x and y are coordinates for the grid nodes
     nx = len(x[:, 0])  # number of points in the i direction
     ny = len(x[0, :])  # number of points in the j direction
@@ -253,6 +263,7 @@ def compute2dfacegridmetrics(x, y, xiface, yiface, xjface, yjface):
 
 
 def compute2dcellgridmetrics(xiface, yiface, xjface, yjface):
+    """Compute grid metrics at cell center for 2D grid."""
     # xiface and yiface are coordinates of the cell faces along j node lines
     # xjface and yjface are coordinates of the cell faces along i node lines
     nx = len(xjface[:, 0])  # number of points in the i direction
@@ -276,6 +287,7 @@ def compute2dcellgridmetrics(xiface, yiface, xjface, yjface):
 
 
 def compute2dfacecenters(x, y):
+    """Compute cell face centers for 2D grid."""
     # nx and ny are number of nodes in the x and y directions
     # including ghost nodes
     nx = len(x[:, 0])
@@ -302,6 +314,7 @@ def compute2dfacecenters(x, y):
 
 
 def compute2dghostnodes(x, y, ngc):
+    """Compute ghost node locations for 2D grid."""
     # x and y are the node coordinates in the x and y directions
     # x and y contain indices for the ghost cell
     # ngc is the number of ghost cell layers
@@ -392,6 +405,7 @@ def compute2dghostnodes(x, y, ngc):
 
 
 def compute2dfacenormals(x, y, sx, sy):
+    """Compute cell face normal vectors for 2D grid."""
     # initialize facenormal x and y components
     normx = np.ones(len(x)-1)
     normy = np.ones(len(x)-1)
@@ -409,6 +423,7 @@ def compute2dfacenormals(x, y, sx, sy):
 
 
 def compute2dnodenormals(fnx, fny):
+    """Compute node normal vectors for 2D grid."""
     # fnx and fny are face normal x and y components
     # initialize node normal components
     normx = np.ones(len(fnx)+1)
@@ -426,6 +441,7 @@ def compute2dnodenormals(fnx, fny):
 
 
 def compute2dcellcenters(x, y):
+    """Compute cell centers for 2D grid."""
     # x and y are the coordinates at the nodes
     # nx and ny and the number of nodes in the x and y directions
     nx = len(x[:, 0])

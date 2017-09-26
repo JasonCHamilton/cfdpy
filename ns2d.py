@@ -1,4 +1,5 @@
-''' 2D Compressible Navier-Stokes Finite Volume Solver
+"""
+2D Compressible Navier-Stokes Finite Volume Solver.
 
     This code is a DNS solver for the 2 dimentional Navier-Stokes equations
     using the finite volume method. The solver uses single block structured
@@ -47,7 +48,7 @@
     The end product should provide a platform for rapid model development and
     testing. Once new models/features are tested using python solvers they can
     be implimented into fortran solvers.
-'''
+"""
 
 
 # import numpy as np
@@ -63,6 +64,14 @@ ngc = 1   # number of ghost cells
 Lx = 3.0  # Length in the x direction in physical units
 Ly = 3.0  # Length in the y direction in physical units
 datatype = 'ASCII'
+# Initial Condition Inputs
+Tref = 300.0     # temperature in K
+Pref = 101325.0  # pressure in Pa
+mwref = 28.938   # molecular weight in g/mol
+gamma = 1.4      # heat capacity ratio
+Pr_ref = 1.0     # Prandtl number
+Uref = 0.0       # x velocity in m/s
+Vref = 0.0       # y velocity in m/s
 
 grid = gridgen.generategrid_2d_uniform(Lx, Ly, nx, ny, ngc)
 
