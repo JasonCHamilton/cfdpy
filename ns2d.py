@@ -51,10 +51,10 @@
 """
 
 
-# import numpy as np
+import numpy as np
 import grids.gridgenerator as gridgen
 import fileio.outputvtk as outputvtk
-
+import simsetup.initialconditions as ics
 
 # Inputs Section #
 # Grid Inputs
@@ -65,14 +65,26 @@ Lx = 3.0  # Length in the x direction in physical units
 Ly = 3.0  # Length in the y direction in physical units
 datatype = 'ASCII'
 # Initial Condition Inputs
-Tref = 300.0     # temperature in K
-Pref = 101325.0  # pressure in Pa
-mwref = 28.938   # molecular weight in g/mol
-gamma = 1.4      # heat capacity ratio
-Pr_ref = 1.0     # Prandtl number
-Uref = 0.0       # x velocity in m/s
-Vref = 0.0       # y velocity in m/s
+T0 = 300.0       # temperature in K
+P0 = 101325.0    # pressure in Pa
+U0 = 3.0         # x velocity in m/s
+V0 = 1.0         # y velocity in m/s
+# Thermodynamic properies
+mw = 28.938     # molecular weight in g/mol
+gamma = 1.4        # heat capacity ratio
+# Transport properies
+T_ref = 273.15     # Reference temperature in K
+Pr_ref = 0.72       # Prandtl number
+S_ref = 110.4      # Sutherland temperature in K
+mu_ref = 1.716e-5  # Reference viscosity
+Cmu = mu_ref*(T_ref+S_ref)/(T_ref*np.sqrt(T_ref))  # Sutherland Coefficient
 
 grid = gridgen.generategrid_2d_uniform(Lx, Ly, nx, ny, ngc)
 
 outputvtk.writegridtovtk(datatype, grid.ngx, grid.ngy, grid.x, grid.y)
+
+fluid = ics.initializefluid(nx, ny, ngc, T0, P0, U0, V0, mw, gamma, T_ref,
+                            Pr_ref, S_ref, mu_ref, Cmu)
+
+outputvtk.writesolutiontovtk(0, datatype, grid.ngx, grid.ngy,
+                             grid.x, grid.y, fluid)
