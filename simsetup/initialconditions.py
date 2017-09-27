@@ -82,4 +82,13 @@ def initializefluid(nx, ny, ngc, T0, P0, U0, V0, mw, gamma, T_ref, Pr_ref,
     # at the cell centers
     fluid.S[:, :] = 0.0  # Source terms are initilized with zero
 
+    # tauxx is the normal stress in the x directio
+    # tauyy is the normal stress in the y direction
+    # tauxy=tauyx is the normal stress in the xy plane
+    fluid.tauxx, fluid.tauyy, fluid.tauxy = computeviscousstress(fluid, grid)
+
+    # qx is the heat transfer in the x direction
+    # qy is the heat transfer in the y direction
+    fluid.qx, fluid.qy = computehearflux(fluid, grid)
+
     return fluid

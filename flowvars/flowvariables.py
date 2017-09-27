@@ -82,3 +82,18 @@ class Fluid2D(object):
 
         # kf is the thermal conductivity at cell centers
         self.kf = np.zeros((nxc, nyc))
+
+        # tauxx is the normal stress in the x direction
+        self.tauxx = np.zeros((nxc, nyc))
+
+        # tauyy is the normal stress in the y direction
+        self.tauyy = np.zeros((nxc, nyc))
+
+        # tauxy=tauyx is the normal stress in the xy plane
+        self.tauxy = np.zeros((nxc, nyc))
+
+        # qx is the heat transfer in the x direction
+        self.qx = np.zeros((nxc, nyc))
+
+        # qy is the heat transfer in the y direction
+        self.qy = np.zeros((nxc, nyc))
