@@ -35,7 +35,27 @@ def writegridtovtk(datatype, nx, ny, x, y):
 
 def writesolutiontovtk(solnum, datatype, nx, ny, x, y, fluid):
     """Output fluid and grid data to vtk structured grid legacy format."""
-    print "\nIN OUTPUT ROUTINE\n"
+    outvars = [
+                fluid.Q[0],
+                fluid.u,
+                fluid.Et,
+                fluid.ein,
+                fluid.P,
+                fluid.T,
+                fluid.mw,
+                fluid.R,
+                fluid.mu,
+                fluid.cp,
+                fluid.cv,
+                fluid.gamma,
+                fluid.kf,
+                fluid.tauxx,
+                fluid.tauyy,
+                fluid.tauxy,
+                fluid.qx,
+                fluid.qy
+              ]
+
     filename = '../output/solution_%05d.vtk' % solnum
     header = '# vtk DataFile Version 2.0'
     title = '2D structured grid solution'
@@ -57,42 +77,13 @@ def writesolutiontovtk(solnum, datatype, nx, ny, x, y, fluid):
         for i in xrange(nx):
             f.write('%f %f %f\n' % (x[i, j], y[i, j], dummy[i, j]))
     f.write('CELL_DATA %d\n' % nc)
-    for name in fluid.varnames:
-        print name, fluid.varnames[name]
-        if fluid.vartype[name] == 'SCALARS':
-            writescalar(f, fluid.varnames[name], name,
-                        fluid.datatype[name], ny-1, nx-1)
-        elif fluid.vartype[name] == 'VECTORS':
-            writevector(f, fluid.varnames[name], name,
-                        fluid.datatype[name], ny-1, nx-1)
-    # f.write('SCALARS Density[kg/m^3] float\n')
-    # f.write('LOOKUP_TABLE default\n')
-    # for j in xrange(ny-1):
-    #     for i in xrange(nx-1):
-    #         f.write('%f\n' % fluid.Q[0, i, j])
-    # f.write('SCALARS Pressure[Pa] float\n')
-    # f.write('LOOKUP_TABLE default\n')
-    # for j in xrange(ny-1):
-    #     for i in xrange(nx-1):
-    #         f.write('%f\n' % fluid.P[i, j])
-    # f.write('SCALARS Temperature[K] float\n')
-    # f.write('LOOKUP_TABLE default\n')
-    # for j in xrange(ny-1):
-    #     for i in xrange(nx-1):
-    #         f.write('%f\n' % fluid.T[i, j])
-    # f.write('SCALARS Viscosity[kg/(m*s)] float\n')
-    # f.write('LOOKUP_TABLE default\n')
-    # for j in xrange(ny-1):
-    #     for i in xrange(nx-1):
-    #         f.write('%f\n' % fluid.mu[i, j])
-    # f.write('SCALARS ThermalConductivity[W/(m*K)] float\n')
-    # f.write('LOOKUP_TABLE default\n')
-    # for j in xrange(ny-1):
-    #     for i in xrange(nx-1):
-    #         f.write('%f\n' % fluid.kf[i, j])
-    # writescalar(f, fluid.Et, 'TotalEnergy[m^2/s^2]', 'float', ny-1, nx-1)
-    # writescalar(f, fluid.Et, 'TotalEnergy[m^2/s^2]', 'float', ny-1, nx-1)
-    # writevector(f, fluid.u, 'Velocity[m/s]', 'float', ny-1, nx-1)
+    for vin in xrange(len(outvars)):
+        if fluid.vartype[vin] == 'SCALARS':
+            writescalar(f, outvars[vin], fluid.varnames[vin],
+                        fluid.datatype[vin], ny-1, nx-1)
+        elif fluid.vartype[vin] == 'VECTORS':
+            writevector(f, outvars[vin], fluid.varnames[vin],
+                        fluid.datatype[vin], ny-1, nx-1)
     f.close()
 
 
