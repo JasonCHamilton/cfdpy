@@ -83,8 +83,13 @@ grid = gridgen.generategrid_2d_uniform(Lx, Ly, nx, ny, ngc)
 
 outputvtk.writegridtovtk(datatype, grid.ngx, grid.ngy, grid.x, grid.y)
 
-fluid = ics.initializefluid(nx, ny, ngc, T0, P0, U0, V0, mw, gamma, T_ref,
-                            Pr_ref, S_ref, mu_ref, Cmu)
+fluid = ics.initializefluid(nx, ny, ngc, T0, P0, U0, V0, mw, gamma,
+                            T_ref, Pr_ref, S_ref, mu_ref, Cmu,
+                            grid.dzetadx_cell, grid.detadx_cell,
+                            grid.dzetady_cell, grid.detady_cell)
+
+for name in fluid.varnames:
+    print name, fluid.varnames[name]
 
 outputvtk.writesolutiontovtk(0, datatype, grid.ngx, grid.ngy,
                              grid.x, grid.y, fluid)

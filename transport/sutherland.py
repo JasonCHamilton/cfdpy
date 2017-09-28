@@ -11,6 +11,7 @@ import numpy as np
 def computeviscosity(T, Cmu, S_ref):
     """Compute viscosity using sutherlands law."""
     mu = Cmu*(T*np.sqrt(T))/(T + S_ref)
+    print "In Transport mu: ", mu
     return mu
 
 

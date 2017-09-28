@@ -14,9 +14,11 @@ from thermodynamics.cpg import (computedensity, computeinternalenergy,
 from transport.sutherland import (computeviscosity,
                                   computethermalconductivity)
 
+from finitevolume.maccormackflux import (computeviscousstress, computehearflux)
+
 
 def initializefluid(nx, ny, ngc, T0, P0, U0, V0, mw, gamma, T_ref, Pr_ref,
-                    S_ref, mu_ref, Cmu):
+                    S_ref, mu_ref, Cmu, dzetadx, detadx, dzetady, detady):
     """Create and initialize solution values from user inputs."""
     fluid = Fluid2D(nx, ny, ngc)
 
@@ -58,7 +60,7 @@ def initializefluid(nx, ny, ngc, T0, P0, U0, V0, mw, gamma, T_ref, Pr_ref,
     fluid.Et = computetotalenergy(fluid.ein, fluid.u[0], fluid.u[1])
 
     # Q[3] is total energy per at cell ceners
-    fluid.Q[3] = fluid.Q[0]*fluid.u[1]
+    fluid.Q[3] = fluid.Q[0]*fluid.Et
 
     # cp is the specific heat at constant pressure at cell centers
     fluid.cp = computecp(fluid.gamma, fluid.R)
@@ -85,10 +87,17 @@ def initializefluid(nx, ny, ngc, T0, P0, U0, V0, mw, gamma, T_ref, Pr_ref,
     # tauxx is the normal stress in the x directio
     # tauyy is the normal stress in the y direction
     # tauxy=tauyx is the normal stress in the xy plane
-    fluid.tauxx, fluid.tauyy, fluid.tauxy = computeviscousstress(fluid, grid)
+    fluid.tauxx, fluid.tauyy, fluid.tauxy = computeviscousstress(fluid.mu,
+                                                                 fluid.u[0],
+                                                                 fluid.u[1],
+                                                                 dzetadx,
+                                                                 detadx,
+                                                                 dzetady,
+                                                                 detady)
 
     # qx is the heat transfer in the x direction
     # qy is the heat transfer in the y direction
-    fluid.qx, fluid.qy = computehearflux(fluid, grid)
+    fluid.qx, fluid.qy = computehearflux(fluid.T, fluid.kf, dzetadx,
+                                         detadx, dzetady, detady)
 
     return fluid
