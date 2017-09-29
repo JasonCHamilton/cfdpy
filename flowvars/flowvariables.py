@@ -159,3 +159,49 @@ class Fluid2D(object):
                          "float",
                          "float"
                         ]
+
+
+# Class to cotain 2D grid data
+class BC2D(object):
+    """Class used for 2D Boundary Conditions."""
+
+    def __init__(self):
+        """Initialize Boundary Conditions"""
+        # BC types:
+        # 0 - subsonic velocity inlet
+        # 1 - supersonic velocity intlet
+        # 2 - subsonic mass flow inlet
+        # 3 - supersonic mass flow intlet
+        # 4 - subsonic outlet
+        # 5 - supersonic outlet
+        # 6 - slip wall
+        # 7 - no slip wall
+        # all boundaries deflaut to no slip walls
+        # imin boundary
+        self.imin_type = 7
+        self.imin_u = 1.0
+        self.imin_v = 0.0
+        self.imin_T = 300.0
+        self.imin_P = 101325.0
+        self.imin_massflow = 1.0
+        # imax boundary
+        self.imax_type = 7
+        self.imax_u = 1.0
+        self.imax_v = 0.0
+        self.imax_T = 300.0
+        self.imax_P = 101325.0
+        self.imax_massflow = 1.0
+        # jmin boundary
+        self.jmin_type = 7
+        self.jmin_u = 1.0
+        self.jmin_v = 0.0
+        self.jmin_T = 300.0
+        self.jmin_P = 101325.0
+        self.jmin_massflow = 1.0
+        # imax boundary
+        self.jmax_type = 7
+        self.jmax_u = 1.0
+        self.jmax_v = 0.0
+        self.jmax_T = 300.0
+        self.jmax_P = 101325.0
+        self.jmax_massflow = 1.0
